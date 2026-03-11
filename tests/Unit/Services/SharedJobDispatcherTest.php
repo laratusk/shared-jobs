@@ -13,10 +13,8 @@ it('dispatches a job to the shared queue', function (): void {
     $dispatcher = new SharedJobDispatcher;
     $dispatcher->dispatch('refund', ['account_id' => 5]);
 
-    Queue::assertPushed(ProcessSharedJob::class, function (ProcessSharedJob $job): bool {
-        return $job->name === 'refund'
-            && $job->payload === ['account_id' => 5];
-    });
+    Queue::assertPushed(ProcessSharedJob::class, fn (ProcessSharedJob $job): bool => $job->name === 'refund'
+        && $job->payload === ['account_id' => 5]);
 });
 
 it('throws when consumer tries to dispatch', function (): void {

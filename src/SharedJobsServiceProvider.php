@@ -15,7 +15,7 @@ final class SharedJobsServiceProvider extends ServiceProvider
 {
     public function register(): void
     {
-        $this->mergeConfigFrom(__DIR__ . '/../config/shared-jobs.php', 'shared-jobs');
+        $this->mergeConfigFrom(__DIR__.'/../config/shared-jobs.php', 'shared-jobs');
 
         /** @var Repository $config */
         $config = $this->app->make(Repository::class);
@@ -23,7 +23,7 @@ final class SharedJobsServiceProvider extends ServiceProvider
         /** @var string $connectionName */
         $connectionName = $config->get('shared-jobs.connection', 'shared-jobs');
 
-        $config->set("queue.connections.{$connectionName}", [
+        $config->set('queue.connections.'.$connectionName, [
             'driver' => 'database',
             'connection' => config('shared-jobs.database_connection'),
             'table' => config('shared-jobs.table', 'shared_jobs'),
@@ -40,11 +40,11 @@ final class SharedJobsServiceProvider extends ServiceProvider
     {
         if ($this->app->runningInConsole()) {
             $this->publishes([
-                __DIR__ . '/../config/shared-jobs.php' => config_path('shared-jobs.php'),
+                __DIR__.'/../config/shared-jobs.php' => config_path('shared-jobs.php'),
             ], 'shared-jobs-config');
 
             $this->publishesMigrations([
-                __DIR__ . '/../database/migrations' => database_path('migrations'),
+                __DIR__.'/../database/migrations' => database_path('migrations'),
             ], 'shared-jobs-migrations');
         }
     }

@@ -81,13 +81,13 @@ final class SharedJobDispatcher implements SharedJobDispatcherInterface
 
             if ($row !== null && $row->status === 'failed') {
                 throw new SharedJobException(
-                    "Shared job '{$name}' failed: " . ($row->error ?? 'Unknown error')
+                    sprintf("Shared job '%s' failed: ", $name).($row->error ?? 'Unknown error')
                 );
             }
 
             if ((time() - $startTime) >= $waitTimeout) {
                 throw new SharedJobTimeoutException(
-                    "Shared job '{$name}' timed out after {$waitTimeout} seconds."
+                    sprintf("Shared job '%s' timed out after %d seconds.", $name, $waitTimeout)
                 );
             }
 
@@ -103,7 +103,7 @@ final class SharedJobDispatcher implements SharedJobDispatcherInterface
 
         if (! $role->canDispatch()) {
             throw new SharedJobException(
-                "This application is configured as a '{$roleValue}' and cannot dispatch shared jobs."
+                sprintf("This application is configured as a '%s' and cannot dispatch shared jobs.", $roleValue)
             );
         }
     }

@@ -23,5 +23,5 @@ it('updates job result to completed', function (): void {
     $row = DB::table('shared_job_results')->where('job_id', $jobId)->first();
 
     expect($row->status)->toBe('completed')
-        ->and(json_decode($row->result, true))->toBe(['success' => true, 'amount' => 100]);
+        ->and(json_decode((string) $row->result, true))->toBe(['success' => true, 'amount' => 100]);
 });

@@ -14,12 +14,10 @@ it('dispatches a job via the facade', function (): void {
 
     SharedJob::dispatch('refund', ['account_id' => 5]);
 
-    Queue::assertPushed(ProcessSharedJob::class, function (ProcessSharedJob $job): bool {
-        return $job->name === 'refund'
-            && $job->payload === ['account_id' => 5]
-            && $job->jobId !== ''
-            && $job->dispatchedAt instanceof CarbonImmutable;
-    });
+    Queue::assertPushed(ProcessSharedJob::class, fn (ProcessSharedJob $job): bool => $job->name === 'refund'
+        && $job->payload === ['account_id' => 5]
+        && $job->jobId !== ''
+        && $job->dispatchedAt instanceof CarbonImmutable);
 });
 
 it('fires SharedJobReceived event when job is processed', function (): void {
@@ -36,12 +34,10 @@ it('fires SharedJobReceived event when job is processed', function (): void {
 
     $job->handle();
 
-    Event::assertDispatched(SharedJobReceived::class, function (SharedJobReceived $event) use ($now): bool {
-        return $event->name === 'refund'
-            && $event->payload === ['account_id' => 5]
-            && $event->jobId === 'test-uuid'
-            && $event->dispatchedAt === $now;
-    });
+    Event::assertDispatched(SharedJobReceived::class, fn (SharedJobReceived $event): bool => $event->name === 'refund'
+        && $event->payload === ['account_id' => 5]
+        && $event->jobId === 'test-uuid'
+        && $event->dispatchedAt === $now);
 });
 
 it('supports fake for testing assertions', function (): void {
@@ -51,9 +47,7 @@ it('supports fake for testing assertions', function (): void {
     SharedJob::dispatch('suspend-account', ['account_id' => 10]);
 
     SharedJob::assertDispatched('refund');
-    SharedJob::assertDispatched('refund', function (string $name, array $payload): bool {
-        return $payload['account_id'] === 5;
-    });
+    SharedJob::assertDispatched('refund', fn (string $name, array $payload): bool => $payload['account_id'] === 5);
     SharedJob::assertDispatched('suspend-account');
     SharedJob::assertDispatchedTimes('refund', 1);
 });

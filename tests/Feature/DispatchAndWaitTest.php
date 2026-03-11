@@ -22,9 +22,7 @@ it('inserts pending row and dispatches job', function (): void {
         // expected
     }
 
-    Queue::assertPushed(ProcessSharedJob::class, function (ProcessSharedJob $job): bool {
-        return $job->name === 'refund' && $job->payload === ['account_id' => 5];
-    });
+    Queue::assertPushed(ProcessSharedJob::class, fn (ProcessSharedJob $job): bool => $job->name === 'refund' && $job->payload === ['account_id' => 5]);
 
     $row = DB::table('shared_job_results')->first();
     expect($row)->not->toBeNull()
@@ -40,7 +38,7 @@ it('returns result when job is completed', function (): void {
     // then immediately update the row to 'completed' so the poll finds it
     $updated = false;
     DB::listen(function ($query) use (&$updated): void {
-        if (! $updated && str_contains($query->sql, 'shared_job_results') && str_contains($query->sql, 'insert')) {
+        if (! $updated && str_contains((string) $query->sql, 'shared_job_results') && str_contains((string) $query->sql, 'insert')) {
             $updated = true;
             // Update all pending rows to completed (there should only be one)
             DB::table('shared_job_results')
@@ -83,7 +81,7 @@ it('throws exception when job status is failed', function (): void {
 
     $updated = false;
     DB::listen(function ($query) use (&$updated): void {
-        if (! $updated && str_contains($query->sql, 'shared_job_results') && str_contains($query->sql, 'insert')) {
+        if (! $updated && str_contains((string) $query->sql, 'shared_job_results') && str_contains((string) $query->sql, 'insert')) {
             $updated = true;
             DB::table('shared_job_results')
                 ->where('status', 'pending')

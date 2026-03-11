@@ -5,6 +5,7 @@ declare(strict_types=1);
 use Carbon\CarbonImmutable;
 use Laratusk\SharedJobs\Events\SharedJobReceived;
 use Laratusk\SharedJobs\Listeners\SharedJobListener;
+use Laratusk\SharedJobs\Tests\TestCase;
 
 beforeEach(function (): void {
     $this->processedPayloads = [];
@@ -14,13 +15,10 @@ beforeEach(function (): void {
     {
         protected string $jobName = 'refund';
 
-        /** @var \Laratusk\SharedJobs\Tests\TestCase */
-        private $test;
-
-        public function __construct($test)
-        {
-            $this->test = $test;
-        }
+        /**
+         * @param  TestCase  $test
+         */
+        public function __construct(private $test) {}
 
         public function process(array $payload, SharedJobReceived $event): void
         {

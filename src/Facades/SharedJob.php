@@ -7,6 +7,7 @@ namespace Laratusk\SharedJobs\Facades;
 use Closure;
 use Illuminate\Support\Facades\Facade;
 use Laratusk\SharedJobs\Contracts\SharedJobDispatcherInterface;
+use Laratusk\SharedJobs\Services\SharedJobDispatcher;
 use Laratusk\SharedJobs\Support\SharedJobFake;
 
 /**
@@ -17,8 +18,8 @@ use Laratusk\SharedJobs\Support\SharedJobFake;
  * @method static void assertNothingDispatched()
  * @method static void assertDispatchedTimes(string $name, int $times)
  *
- * @see \Laratusk\SharedJobs\Services\SharedJobDispatcher
- * @see \Laratusk\SharedJobs\Support\SharedJobFake
+ * @see SharedJobDispatcher
+ * @see SharedJobFake
  */
 final class SharedJob extends Facade
 {
@@ -26,7 +27,7 @@ final class SharedJob extends Facade
     {
         $fake = new SharedJobFake;
 
-        static::swap($fake);
+        self::swap($fake);
 
         return $fake;
     }

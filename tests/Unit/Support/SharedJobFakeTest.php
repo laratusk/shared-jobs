@@ -3,7 +3,6 @@
 declare(strict_types=1);
 
 use Laratusk\SharedJobs\Support\SharedJobFake;
-use PHPUnit\Framework\AssertionFailedError;
 use PHPUnit\Framework\ExpectationFailedException;
 
 it('records dispatched jobs', function (): void {
@@ -17,18 +16,14 @@ it('asserts dispatched with callback', function (): void {
     $fake = new SharedJobFake;
     $fake->dispatch('refund', ['account_id' => 5]);
 
-    $fake->assertDispatched('refund', function (string $name, array $payload): bool {
-        return $payload['account_id'] === 5;
-    });
+    $fake->assertDispatched('refund', fn (string $name, array $payload): bool => $payload['account_id'] === 5);
 });
 
 it('fails when asserting dispatched with unmet callback', function (): void {
     $fake = new SharedJobFake;
     $fake->dispatch('refund', ['account_id' => 5]);
 
-    $fake->assertDispatched('refund', function (string $name, array $payload): bool {
-        return $payload['account_id'] === 999;
-    });
+    $fake->assertDispatched('refund', fn (string $name, array $payload): bool => $payload['account_id'] === 999);
 })->throws(ExpectationFailedException::class);
 
 it('asserts not dispatched', function (): void {

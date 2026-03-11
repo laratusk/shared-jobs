@@ -55,7 +55,7 @@ it('delegates respond to SharedJobResponderInterface', function (): void {
         ->first();
 
     expect($row->status)->toBe('completed')
-        ->and(json_decode($row->result, true))->toBe(['success' => true, 'amount' => 100]);
+        ->and(json_decode((string) $row->result, true))->toBe(['success' => true, 'amount' => 100]);
 });
 
 it('resolves responder from container', function (): void {
@@ -63,7 +63,7 @@ it('resolves responder from container', function (): void {
     $capturedJobId = null;
     $capturedData = null;
 
-    $this->app->bind(SharedJobResponderInterface::class, function () use (&$called, &$capturedJobId, &$capturedData) {
+    $this->app->bind(SharedJobResponderInterface::class, function () use (&$called, &$capturedJobId, &$capturedData): SharedJobResponderInterface {
         return new class($called, $capturedJobId, $capturedData) implements SharedJobResponderInterface
         {
             public function __construct(

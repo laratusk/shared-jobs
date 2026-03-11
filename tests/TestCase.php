@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Laratusk\SharedJobs\Tests;
 
+use Laratusk\SharedJobs\Facades\SharedJob;
 use Laratusk\SharedJobs\SharedJobsServiceProvider;
 use Orchestra\Testbench\TestCase as BaseTestCase;
 
@@ -19,13 +20,13 @@ abstract class TestCase extends BaseTestCase
     protected function getPackageAliases($app): array
     {
         return [
-            'SharedJob' => \Laratusk\SharedJobs\Facades\SharedJob::class,
+            'SharedJob' => SharedJob::class,
         ];
     }
 
     protected function defineDatabaseMigrations(): void
     {
-        $this->loadMigrationsFrom(__DIR__ . '/../database/migrations');
+        $this->loadMigrationsFrom(__DIR__.'/../database/migrations');
     }
 
     protected function getEnvironmentSetUp($app): void

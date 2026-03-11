@@ -33,10 +33,10 @@ final class SharedJobFake implements SharedJobDispatcherInterface
 
         Assert::assertNotEmpty(
             $matching,
-            "The expected shared job [{$name}] was not dispatched."
+            sprintf('The expected shared job [%s] was not dispatched.', $name)
         );
 
-        if ($callback !== null) {
+        if ($callback instanceof Closure) {
             $filtered = array_filter(
                 $matching,
                 fn (array $job): bool => $callback($job['name'], $job['payload']),
@@ -44,7 +44,7 @@ final class SharedJobFake implements SharedJobDispatcherInterface
 
             Assert::assertNotEmpty(
                 $filtered,
-                "The expected shared job [{$name}] was dispatched, but the callback condition was not met."
+                sprintf('The expected shared job [%s] was dispatched, but the callback condition was not met.', $name)
             );
         }
     }
@@ -55,7 +55,7 @@ final class SharedJobFake implements SharedJobDispatcherInterface
 
         Assert::assertEmpty(
             $matching,
-            "The unexpected shared job [{$name}] was dispatched."
+            sprintf('The unexpected shared job [%s] was dispatched.', $name)
         );
     }
 
@@ -63,7 +63,7 @@ final class SharedJobFake implements SharedJobDispatcherInterface
     {
         Assert::assertEmpty(
             $this->dispatched,
-            'Shared jobs were dispatched unexpectedly: ' . implode(
+            'Shared jobs were dispatched unexpectedly: '.implode(
                 ', ',
                 array_map(fn (array $job): string => $job['name'], $this->dispatched),
             )
@@ -78,7 +78,7 @@ final class SharedJobFake implements SharedJobDispatcherInterface
         Assert::assertSame(
             $times,
             $count,
-            "The expected shared job [{$name}] was dispatched {$count} times instead of {$times} times."
+            sprintf('The expected shared job [%s] was dispatched %d times instead of %d times.', $name, $count, $times)
         );
     }
 

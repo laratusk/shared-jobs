@@ -27,7 +27,7 @@ it('registers the queue connection dynamically', function (): void {
 
 it('uses custom connection name from config', function (): void {
     config()->set('shared-jobs.connection', 'custom-shared');
-    config()->set("queue.connections.custom-shared", [
+    config()->set('queue.connections.custom-shared', [
         'driver' => 'database',
         'table' => 'shared_jobs',
         'queue' => 'shared',
