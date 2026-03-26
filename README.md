@@ -5,7 +5,7 @@ Cross-application job dispatch via a shared database for Laravel. Two separate L
 ## Requirements
 
 - PHP 8.2+
-- Laravel 11 or 12
+- Laravel 11, 12, or 13
 - A shared database accessible by both applications
 
 > This package uses Laravel's `database` queue driver. Both applications must connect to the same database so they can read/write from the shared jobs table.
